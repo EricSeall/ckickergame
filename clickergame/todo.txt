@@ -1,0 +1,6 @@
+***set attributes and onclick for button
+
+make upgrades section
+add styling
+objects instead of groups of variables
+change object names
