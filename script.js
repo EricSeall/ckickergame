@@ -1,12 +1,5 @@
 const LOCALSTORAGEKEY = "ericClickerGame";
 
-let state = {
-  gold: 0,
-  goldPerSecond: 0,
-  clickingPower: 1,
-};
-let updateRate = 1;
-
 let bean = {
   name: "Bean",
   count: 0,
@@ -35,6 +28,15 @@ let beet = {
 };
 
 let items = [bean, carrot, beet];
+
+let state = {
+  gold: 0,
+  goldPerSecond: 0,
+  clickingPower: 1,
+  incomeItems: items
+};
+
+
 
 function clickGold() {
   state.gold += state.clickingPower;
@@ -92,7 +94,7 @@ function tick() {
   }
 
   let total = 0;
-  for (let item of items) {
+  for (let item of state.incomeItems) {
     //iterate through, unlock, and calculate goldPerSecond
     total += item.gps;
     if (!item.unlocked) {
@@ -120,8 +122,23 @@ function loadProgress() {
   if (raw) {
     state = JSON.parse(raw);
   }
+
+  bean = state.incomeItems[0]
+  if (bean.unlocked){
+    unlock(bean)
+  }
+  
+  carrot = state.incomeItems[1]
+  if (carrot.unlocked){
+    unlock(carrot)
+  }
+
+  beet = state.incomeItems[2]
+  if (beet.unlocked){
+    unlock(beet)
+  }
 }
 
 loadProgress();
 tick();
-setInterval(saveProgress, 3000);
+setInterval(saveProgress, 1000);
