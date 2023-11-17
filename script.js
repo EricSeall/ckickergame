@@ -27,13 +27,20 @@ let beet = {
   unlocked: false,
 };
 
-let items = [bean, carrot, beet];
+let potato = {
+  name: "Potato",
+  count: 0,
+  cost: 1000,
+  value: 50,
+  gps: 0,
+  unlocked: false,
+};
 
 let state = {
   gold: 0,
   goldPerSecond: 0,
   clickingPower: 1,
-  incomeItems: items
+  incomeItems: [bean, carrot, beet, potato],
 };
 
 
@@ -120,23 +127,36 @@ function loadProgress() {
   const raw = localStorage.getItem(LOCALSTORAGEKEY);
 
   if (raw) {
-    state = JSON.parse(raw);
-  }
+    let tempState = JSON.parse(raw);
+    
+    state.gold = tempState.gold;
+    state.goldPerSecond = tempState.goldPerSecond;
+    state.clickingPower = tempState.clickingPower;
 
-  bean = state.incomeItems[0]
-  if (bean.unlocked){
-    unlock(bean)
-  }
+    for (let i = 0; i < tempState.incomeItems.length; i++){
+      state.incomeItems[i] = tempState.incomeItems[i];
+    }
+
+    bean = state.incomeItems[0];
+    if (bean.unlocked){
+      unlock(bean);
+    }
   
-  carrot = state.incomeItems[1]
-  if (carrot.unlocked){
-    unlock(carrot)
-  }
+    carrot = state.incomeItems[1];
+    if (carrot.unlocked){
+      unlock(carrot);
+    }
 
-  beet = state.incomeItems[2]
-  if (beet.unlocked){
-    unlock(beet)
-  }
+    beet = state.incomeItems[2];
+    if (beet.unlocked){
+      unlock(beet);
+    }
+
+    potato = state.incomeItems[3];
+    if (potato.unlocked){
+      unlock(potato);
+    }
+  } 
 }
 
 loadProgress();
