@@ -2,6 +2,9 @@ const LOCALSTORAGEKEY = "ericClickerGame";
 
 const FPS = 60
 
+let closeTime = null
+let openTime = null
+
 let bean = {
   name: "Bean",
   count: 0,
@@ -158,6 +161,26 @@ function updateHeader(){
   header.innerHTML = round(state.gold) + " Gold - Farmer Clicker"
 }
 
+
+document.addEventListener("visibilitychange", () => {
+  let goldWhileGone = 0
+
+  if (document.visibilityState === "hidden") {
+    closeTime = Date.now()
+    console.log("time is now " + closeTime)
+    console.log("visibility is now " + document.visibilityState)
+  } else {
+    openTime = Date.now()
+    goldWhileGone = state.goldPerSecond * Math.floor((openTime - closeTime)/1000)
+    console.log("time is now " + openTime)
+    console.log('time elapsed: ' + (openTime - closeTime))
+    console.log("gold per second: " + state.goldPerSecond)
+    console.log('gold while gone: ' + goldWhileGone)
+    state.gold += goldWhileGone
+    console.log("visibility is now " + document.visibilityState)
+  }
+  
+});
 loadProgress();
 tick();
 setInterval(saveProgress, 1000);
