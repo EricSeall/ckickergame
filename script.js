@@ -1,5 +1,7 @@
 const LOCALSTORAGEKEY = "ericClickerGame";
 
+const FPS = 60
+
 let bean = {
   name: "Bean",
   count: 0,
@@ -34,13 +36,24 @@ let state = {
   goldPerSecond: 0,
   clickingPower: 1,
   incomeItems: items
-};
+}
+
+///////////////////////////////////////////////////////////////
+// Helper functions
+///////////////////////////////////////////////////////////////
+
+function round(number){
+  return Math.floor(number)
+}
 
 
+///////////////////////////////////////////////////////////////
+// Game Logic Functions
+///////////////////////////////////////////////////////////////
 
 function clickGold() {
   state.gold += state.clickingPower;
-  document.getElementById("gold").innerHTML = state.gold.toString();
+  document.getElementById("gold").innerHTML = round(state.gold);
 }
 
 function unlock(item) {
@@ -80,18 +93,19 @@ function buy(item) {
     state.gold -= item.cost;
     item.cost = Math.round(item.cost * 1.15);
 
-    document.getElementById("gold").innerHTML = state.gold;
+    document.getElementById("gold").innerHTML = round(state.gold);
     document.getElementById(itemName + "s").innerHTML = item.count;
     document.getElementById(itemName + "cost").innerHTML = item.cost;
     item.gps = item.count * item.value;
   }
 }
-
-function tick() {
-  if (state.goldPerSecond > 0) {
+function updateGold(){
     //increment gold along with gps
-    state.gold += 1;
-  }
+    state.gold += state.goldPerSecond/FPS;
+}
+function tick() {
+  
+  updateGold();
 
   let total = 0;
   for (let item of state.incomeItems) {
@@ -106,10 +120,10 @@ function tick() {
   }
   state.goldPerSecond = total;
 
-  document.getElementById("gold").innerHTML = state.gold;
+  document.getElementById("gold").innerHTML = round(state.gold);
   document.getElementById("goldpersecond").innerHTML = state.goldPerSecond;
 
-  setTimeout(tick, 1000 / state.goldPerSecond);
+  setTimeout(tick, 1000 / FPS);
 }
 
 function saveProgress() {
@@ -139,6 +153,12 @@ function loadProgress() {
   }
 }
 
+function updateHeader(){
+  let header = document.getElementById('header')
+  header.innerHTML = round(state.gold) + " Gold - Farmer Clicker"
+}
+
 loadProgress();
 tick();
 setInterval(saveProgress, 1000);
+setInterval(updateHeader, 5000);
