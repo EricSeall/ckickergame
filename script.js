@@ -161,8 +161,7 @@ function updateHeader(){
   header.innerHTML = round(state.gold) + " Gold - Farmer Clicker"
 }
 
-
-document.addEventListener("visibilitychange", () => {
+function backgroundUpdate(){
   let goldWhileGone = 0
 
   if (document.visibilityState === "hidden") {
@@ -179,8 +178,8 @@ document.addEventListener("visibilitychange", () => {
     state.gold += goldWhileGone
     console.log("visibility is now " + document.visibilityState)
   }
-  
-});
+}
+document.addEventListener("visibilitychange", backgroundUpdate);
 loadProgress();
 tick();
 setInterval(saveProgress, 1000);
